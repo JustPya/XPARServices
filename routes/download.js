@@ -4,7 +4,9 @@ const router = express.Router();
 router.get('/:name', (req, res) =>{
     const filepath = process.env.ASSETS_PATH+req.params.name;
     res.download(filepath, (err)=>{
-        res.send(err);
+        if(err){
+            res.send(err);
+        }
     });
 });
 

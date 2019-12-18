@@ -27,6 +27,18 @@ router.post('/', async (req, res) =>{
     }
 });
 
+// Create Resource method
+async function createResource(resources){
+    try{
+        const saveResource = await resources.save();
+        console.log("Resource guardado ", saveResource);
+        return saveResource;
+    }catch(err){
+        console.log("Resource no guardado", err)
+        
+    }
+}
+
 // Get resource by id
 router.get('/:resoId', async (req, res) =>{
     try{
@@ -63,3 +75,4 @@ router.patch('/:resoId', async (req, res) =>{
 });
 
 module.exports = router;
+module.exports.createResource = createResource;

@@ -29,6 +29,16 @@ router.post('/', async (req, res) =>{
     }
 });
 
+// CreateInstrument method
+async function createInstrument(instrument){
+    try{
+        const saveInstrument = await instrument.save();
+        res.json(saveInstrument);
+    }catch(err){
+        res.json({message: err});
+    }
+}
+
 // Get instrument by id
 router.get('/:instId', async (req, res) =>{
     try{
@@ -67,3 +77,4 @@ router.patch('/:instId', async (req, res) =>{
 });
 
 module.exports = router;
+module.exports.createInstrument = createInstrument;
