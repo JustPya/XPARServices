@@ -65,12 +65,11 @@ router.delete('/:instId', async (req, res) =>{
 //Update band
 router.patch('/:instId', async (req, res) =>{
     try{
-        const updatedInst = await Instrument.updateOne(
-            {_id: req.params.instId},
-            {$set: {name: req.body.name}},
-            {$set: {resource: req.body.resource}}
-        );
-        res.json(updatedInst);
+        const inst = await Instrument.findOne({_id: req.params.instId});
+        inst.name = req.body.name;
+        inst.resource = req.body.resource;
+        inst.save();
+        res.json(inst);
     }catch(err){
         res.json({message: err});
     }

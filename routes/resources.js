@@ -17,7 +17,9 @@ router.post('/', async (req, res) =>{
     const resources = new Resources({
         name: req.body.name,
         path: req.body.path,
-        type: req.body.type
+        type: req.body.type,
+        description: req.body.description,
+        extension: req.body.extension
     });
     try{
         const saveResource = await resources.save();
@@ -62,13 +64,14 @@ router.delete('/:resoId', async (req, res) =>{
 //Update resource
 router.patch('/:resoId', async (req, res) =>{
     try{
-        const updatedReso = await Resources.updateOne(
-            {_id: req.params.resoId},
-            {$set: {name: req.body.name}},
-            {$set: {path: req.body.path}},
-            {$set: {type: req.body.type}}
-        );
-        res.json(updatedReso);
+        const resour = await Resources.findOne({_id: req.params.resoId});
+        resour.name = req.body.name;
+        resour.path = req.body.path;
+        resour.type = req.body.type;
+        resour.description = req.body.description;
+        resour.extension = req.body.extension;
+        await resour.save();
+        res.json(resour); 
     }catch(err){
         res.json({message: err});
     }

@@ -16,7 +16,8 @@ router.get('/', async (req, res) =>{
 router.post('/', async (req, res) =>{
     const band = new Band({
         name: req.body.name,
-        description: req.body.description
+        description: req.body.description,
+        resources: req.body.resources
     });
     try{
         const saveBand = await band.save();

@@ -1,29 +1,48 @@
 const express = require('express');
-const router = express.Router();
+const fs = require('fs-extra');
 const upload = require('express-fileupload');
 const resources = require('./resources');
 const Resource = require('../models/Resources');
-const instruments = require('./instrument');
-const Instrument = require('../models/Instrument');
+const router = express.Router();
 
 
 router.use(upload());
 
-router.post("/", function(req, res){
+router.post('/video', (req, res) =>{
     if(req.files){
         const file =req.files.filename;
         const filename = file.name;
-        file.mv(process.env.ASSETS_PATH+filename, async function(err){
-            if(!err){
-                const respond = await createRelation(filename);
-                res.json(respond);
-            }
-            else{
-                res.send(err);
-            }
+        file.mv(process.env.ASSETS_PATH+'/videos/'+filename, async (err) => {
+            console.log(err)
+            res.send(err);
         });
     }
 });
+
+router.post('/image', (req, res) =>{
+    if(req.files){
+        const file =req.files.filename;
+        const filename = file.name;
+        file.mv(process.env.ASSETS_PATH + '/images/' + filename, async (err) =>{
+            res.send(err);
+        });
+    }
+
+});
+
+router.post('/update-resource', (req, res) =>{
+    const type = req.body.type;
+    const filename = req.body.filename;
+    const newFilename = req.body.newFilename;
+    const path = process.env.ASSETS_PATH + type + '/';
+    try{
+        fs.rename(path + filename, path + newFilename);
+        res.send({"status": "200"});
+    }catch(err){
+        res.send(err);
+    }
+});
+
 async function createRelation(filename){
     const type = filename.split('.');
     const resour = new Resource({
