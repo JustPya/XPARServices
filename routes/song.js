@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const Song = require('../models/Song');
+const Instrument = require('../models/Instrument');
+
 
 // Get all songs
 router.get('/', async (req, res) =>{
@@ -8,9 +10,16 @@ router.get('/', async (req, res) =>{
         const songs = await 
         Song
         .find()
-        .populate('band', 'name');
-        res.json(songs);
+        .populate('band')
+        .populate('instruments')
+        .populate('resources');
+        
         console.log(songs);
+        const song = {
+            songs: songs
+        }
+        res.json(song);
+        
     }catch(err){
         res.json({message: err});
     }
@@ -39,9 +48,15 @@ router.get('/:songId', async (req, res) =>{
         const songs = await
         Song
         .findById(req.params.songId)
-        .populate('band', 'name');
+        .populate('band')
+        .populate('instruments')
+        .populate('resources');
+        console.log(songs);
+        const res2 = {
+            band: songs.instruments    
+        };
         res.json(songs);
-    }catch(err){
+    }catch(err){    
         res.json({message: err});
     }
 });
@@ -70,6 +85,7 @@ router.patch('/:songId', async (req, res) =>{
         res.json({message: err});
     }
 });
+
 
 
 module.exports = router;
