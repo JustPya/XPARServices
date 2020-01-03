@@ -1,3 +1,4 @@
+const cors = require('cors');
 const express = require('express');
 const connectDB = require('./database/Connection');
 const app = express();
@@ -12,8 +13,9 @@ const scenographyRoute = require('./routes/scenography');
 const uploadRoute = require('./routes/upload');
 const downloadRoute = require('./routes/download');
 
+app.use(cors());
 app.use(express.json());
-app.use(express.urlencoded({ extended: false}));
+app.use(express.urlencoded({ extended: false }));
 app.use('/band', bandRoute);
 app.use('/auth', authRoute);
 app.use('/song', songRoute);
@@ -23,16 +25,14 @@ app.use('/scen', scenographyRoute);
 app.use('/upload', uploadRoute);
 app.use('/download', downloadRoute);
 
-
 /*Routes */
-app.get('/', (req, res) =>{
-    res.send('Hello World');
+app.get('/', (req, res) => {
+  res.send('Hello World');
 });
-app.get('/api', function(req, res){
-    res.sendFile(__dirname+'/index.html');
+app.get('/api', function(req, res) {
+  res.sendFile(__dirname + '/index.html');
 });
 
 const Port = process.env.Port || 3000;
 connectDB();
 app.listen(Port, () => console.log('Server Started'));
-
