@@ -27,7 +27,7 @@ app.use('/download', downloadRoute);
 
 /*Routes */
 app.get('/', (req, res) => {
-  res.send('Hello World');
+  res.send('XPAR server home page');
 });
 app.get('/api', function(req, res) {
   res.sendFile(__dirname + '/index.html');
