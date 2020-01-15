@@ -10,11 +10,15 @@ router.use(upload());
 router.post('/video', (req, res) => {
   res.header('Access-Control-Allow-Origin', '*');
   if (req.files) {
-    const file = req.files.filename;
+    const file = req.files.file;
     const filename = file.name;
     file.mv(process.env.ASSETS_PATH + '/videos/' + filename, async err => {
       console.log(err);
-      res.send({ status: 'fail', message: err });
+      if (err) {
+        res.send({ status: 'fail', message: err });
+      } else {
+        res.send({ status: 'ok', message: 'video guardado' });
+      }
     });
   }
 });
@@ -32,10 +36,11 @@ router.post('/image', (req, res) => {
 
 router.post('/update-resource', (req, res) => {
   res.header('Access-Control-Allow-Origin', '*');
+  console.log(req.body);
   const type = req.body.type;
   const filename = req.body.filename;
   const newFilename = req.body.newFilename;
-  const path = process.env.ASSETS_PATH + type + '/';
+  const path = process.env.ASSETS_PATH + '/' + type + '/';
   try {
     fs.rename(path + filename, path + newFilename);
     res.json({ status: 'ok', message: 'Recurso grabado' });
